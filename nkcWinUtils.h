@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include <Windows.h>
 #include <tchar.h>
@@ -7,7 +7,7 @@
 
 namespace nkc {
 
-// ƒXƒƒbƒvƒNƒ‰ƒX
+// ã‚¹ãƒ¯ãƒƒãƒ—ã‚¯ãƒ©ã‚¹
 template<class T>
 class SWAP {
 public:
@@ -22,27 +22,27 @@ typedef std::vector<std::vector<std::string>> STR_TABLE;
 
 namespace wut {
 
-// ƒ}ƒ‹ƒ`ƒoƒCƒg•¶š—ñ‚ğƒƒCƒh•¶š—ñiUNICODEj‚É•ÏŠ·
+// ãƒãƒ«ãƒãƒã‚¤ãƒˆæ–‡å­—åˆ—ã‚’ãƒ¯ã‚¤ãƒ‰æ–‡å­—åˆ—ï¼ˆUNICODEï¼‰ã«å¤‰æ›
 std::wstring Multi2Wide(std::string const& src);
 
-// ‘®•t‚«ƒfƒoƒbƒOo—Í
+// æ›¸å¼ä»˜ããƒ‡ãƒãƒƒã‚°å‡ºåŠ›
 int DebugPrintf(LPCTSTR format, ...);
 
-// ƒe[ƒuƒ‹‚ğ“Ç‚İ‚İ
+// ãƒ†ãƒ¼ãƒ–ãƒ«ã‚’èª­ã¿è¾¼ã¿
 bool ReadTable(const std::string& filename, STR_TABLE& table, const char delimiter = ',');
 
-// ƒ}ƒ‹ƒ`ƒfƒBƒXƒvƒŒƒC‚Ìî•ñ‚ğæ“¾
-// —v‘f0FƒƒCƒ“ƒEƒCƒ“ƒhƒE
+// ãƒãƒ«ãƒãƒ‡ã‚£ã‚¹ãƒ—ãƒ¬ã‚¤ã®æƒ…å ±ã‚’å–å¾—
+// è¦ç´ 0ï¼šãƒ¡ã‚¤ãƒ³ã‚¦ã‚¤ãƒ³ãƒ‰ã‚¦
 std::vector<RECT> GetDisplayInfo();
 
-// ƒfƒBƒXƒvƒŒƒCî•ñæ“¾ƒR[ƒ‹ƒoƒbƒN
+// ãƒ‡ã‚£ã‚¹ãƒ—ãƒ¬ã‚¤æƒ…å ±å–å¾—ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯
 BOOL CALLBACK MonitorEnumProc(
 	HMONITOR hMon, HDC hdcMon, LPRECT lpMon, LPARAM dwData);
 
-// ˆÀ‘S‚ÈƒfƒŠ[ƒg
+// å®‰å…¨ãªãƒ‡ãƒªãƒ¼ãƒˆ
 void SafeDelete(void** ptr);
 
-// “ú•t•¶š—ñæ“¾
+// æ—¥ä»˜æ™‚åˆ»æ–‡å­—åˆ—å–å¾—
 std::string DateTimeStr();
 
 }; // namespace wut

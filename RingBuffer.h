@@ -1,6 +1,8 @@
-#pragma once
+ï»¿#pragma once
 
 #include <mutex>
+
+namespace nkc {
 
 template<class T>
 class RingBuffer
@@ -14,24 +16,24 @@ class RingBuffer
 	int _read;
 	bool _update;
 public:
-	// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-	// size ƒoƒbƒtƒ@‚ÌƒTƒCƒY
-	// initial ‘S—v‘f‚Ì‰Šú’l
+	// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	// size ãƒãƒƒãƒ•ã‚¡ã®ã‚µã‚¤ã‚º
+	// initial å…¨è¦ç´ ã®åˆæœŸå€¤
 	RingBuffer(int size = DEEFAULT_SIZE);
 	RingBuffer(int size, T initial);
 
-	// ƒfƒXƒgƒ‰ƒNƒ^
+	// ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	~RingBuffer();
 
-	// ƒf[ƒ^‚ğŠi”[‚·‚é
+	// ãƒ‡ãƒ¼ã‚¿ã‚’æ ¼ç´ã™ã‚‹
 	void Put(T value);
 
-	// ÅV‚Ìƒf[ƒ^æ‚èo‚µ
-	// peeking true æ‚èo‚µ‹L˜^‚µ‚È‚¢  false (ƒfƒtƒHƒ‹ƒgjæ‚èo‚µ‹L˜^‚·‚é
-	// past ‰ß‹‚É‚³‚©‚Ì‚Ú‚éiƒfƒtƒHƒ‹ƒg=0j
+	// æœ€æ–°ã®ãƒ‡ãƒ¼ã‚¿å–ã‚Šå‡ºã—
+	// peeking true å–ã‚Šå‡ºã—è¨˜éŒ²ã—ãªã„  false (ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆï¼‰å–ã‚Šå‡ºã—è¨˜éŒ²ã™ã‚‹
+	// past éå»ã«ã•ã‹ã®ã¼ã‚‹ï¼ˆãƒ‡ãƒ•ã‚©ãƒ«ãƒˆ=0ï¼‰
 	T Get(bool peeking = false, int past = 0);
 
-	// V‚µ‚¢ƒf[ƒ^‚ª’Ç‰Á‚³‚ê‚½‚©
+	// æ–°ã—ã„ãƒ‡ãƒ¼ã‚¿ãŒè¿½åŠ ã•ã‚ŒãŸã‹
 	bool IsNew() { return _update; };
 };
 
@@ -94,3 +96,5 @@ T RingBuffer<T>::Get(bool peeking, int past) {
 
 	return value;
 }
+
+}; // namespace nkc

@@ -1,4 +1,4 @@
-#include "nkcWinUtils.h"
+ï»¿#include "nkcWinUtils.h"
 
 #include <system_error>
 #include <fstream>
@@ -8,7 +8,7 @@
 namespace nkc {
 namespace wut {
 
-// ƒ}ƒ‹ƒ`ƒoƒCƒg•¶š—ñ‚ğƒƒCƒh•¶š—ñiUNICODEj‚É•ÏŠ·
+// ãƒãƒ«ãƒãƒã‚¤ãƒˆæ–‡å­—åˆ—ã‚’ãƒ¯ã‚¤ãƒ‰æ–‡å­—åˆ—ï¼ˆUNICODEï¼‰ã«å¤‰æ›
 std::wstring Multi2Wide(std::string const& src) {
 	auto const dest_size = ::MultiByteToWideChar(CP_ACP, 0U, src.data(), -1, nullptr, 0U);
 	std::vector<wchar_t> dest(dest_size, L'\0');
@@ -20,7 +20,7 @@ std::wstring Multi2Wide(std::string const& src) {
 	return std::wstring(dest.begin(), dest.end());
 }
 
-// ‘®•t‚«ƒfƒoƒbƒOo—Í
+// æ›¸å¼ä»˜ããƒ‡ãƒãƒƒã‚°å‡ºåŠ›
 int DebugPrintf(LPCTSTR format, ...) {
 	va_list args;
 	va_start(args, format);
@@ -35,43 +35,43 @@ int DebugPrintf(LPCTSTR format, ...) {
 	return len;
 }
 
-// ƒe[ƒuƒ‹‚ğ“Ç‚İ‚İ
+// ãƒ†ãƒ¼ãƒ–ãƒ«ã‚’èª­ã¿è¾¼ã¿
 bool ReadTable(const std::string& filename, STR_TABLE& table, const char delimiter) {
-	// ƒtƒ@ƒCƒ‹‚ğŠJ‚­
+	// ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é–‹ã
 	std::fstream filestream(filename);
-	if (!filestream.is_open()) return false; // ƒtƒ@ƒCƒ‹‚ªŠJ‚¯‚È‚©‚Á‚½ê‡‚ÍI—¹
+	if (!filestream.is_open()) return false; // ãƒ•ã‚¡ã‚¤ãƒ«ãŒé–‹ã‘ãªã‹ã£ãŸå ´åˆã¯çµ‚äº†
 
-	// ƒtƒ@ƒCƒ‹‚ğ“Ç‚İ‚Ş
+	// ãƒ•ã‚¡ã‚¤ãƒ«ã‚’èª­ã¿è¾¼ã‚€
 	while (!filestream.eof()) {
-		// ‚Ps“Ç‚İ‚Ş
+		// ï¼‘è¡Œèª­ã¿è¾¼ã‚€
 		std::string buffer;
 		filestream >> buffer;
 
-		// ƒtƒ@ƒCƒ‹‚©‚ç“Ç‚İ‚ñ‚¾‚Ps‚Ì•¶š—ñ‚ğ‹æØ‚è•¶š‚Å•ª‚¯‚ÄƒŠƒXƒg‚É’Ç‰Á‚·‚é
-		std::vector<std::string> record;              // ‚Ps•ª‚Ì•¶š—ñ‚ÌƒŠƒXƒg
-		std::istringstream streambuffer(buffer); // •¶š—ñƒXƒgƒŠ[ƒ€
-		std::string token;                       // ‚PƒZƒ‹•ª‚Ì•¶š—ñ
+		// ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰èª­ã¿è¾¼ã‚“ã ï¼‘è¡Œã®æ–‡å­—åˆ—ã‚’åŒºåˆ‡ã‚Šæ–‡å­—ã§åˆ†ã‘ã¦ãƒªã‚¹ãƒˆã«è¿½åŠ ã™ã‚‹
+		std::vector<std::string> record;              // ï¼‘è¡Œåˆ†ã®æ–‡å­—åˆ—ã®ãƒªã‚¹ãƒˆ
+		std::istringstream streambuffer(buffer); // æ–‡å­—åˆ—ã‚¹ãƒˆãƒªãƒ¼ãƒ 
+		std::string token;                       // ï¼‘ã‚»ãƒ«åˆ†ã®æ–‡å­—åˆ—
 		while (std::getline(streambuffer, token, delimiter)) {
-			// ‚PƒZƒ‹•ª‚Ì•¶š—ñ‚ğƒŠƒXƒg‚É’Ç‰Á‚·‚é
+			// ï¼‘ã‚»ãƒ«åˆ†ã®æ–‡å­—åˆ—ã‚’ãƒªã‚¹ãƒˆã«è¿½åŠ ã™ã‚‹
 			record.push_back(token);
 		}
 
-		// ‚Ps•ª‚Ì•¶š—ñ‚ğo—Íˆø”‚ÌƒŠƒXƒg‚É’Ç‰Á‚·‚é
+		// ï¼‘è¡Œåˆ†ã®æ–‡å­—åˆ—ã‚’å‡ºåŠ›å¼•æ•°ã®ãƒªã‚¹ãƒˆã«è¿½åŠ ã™ã‚‹
 		table.push_back(record);
 	}
 
 	return true;
 }
 
-// ƒ}ƒ‹ƒ`ƒfƒBƒXƒvƒŒƒC‚Ìî•ñ‚ğæ“¾
-// —v‘f0FƒƒCƒ“ƒEƒCƒ“ƒhƒE
+// ãƒãƒ«ãƒãƒ‡ã‚£ã‚¹ãƒ—ãƒ¬ã‚¤ã®æƒ…å ±ã‚’å–å¾—
+// è¦ç´ 0ï¼šãƒ¡ã‚¤ãƒ³ã‚¦ã‚¤ãƒ³ãƒ‰ã‚¦
 std::vector<RECT> GetDisplayInfo() {
-	// ƒfƒBƒXƒvƒŒƒCî•ñæ“¾
+	// ãƒ‡ã‚£ã‚¹ãƒ—ãƒ¬ã‚¤æƒ…å ±å–å¾—
 	std::vector<RECT> displays;
 	EnumDisplayMonitors(NULL, NULL,
 		(MONITORENUMPROC)MonitorEnumProc, (LPARAM)&displays);
 
-	// ƒƒCƒ“ƒ‚ƒjƒ^‚ğæ“ª—v‘f‚ÉˆÚ“®
+	// ãƒ¡ã‚¤ãƒ³ãƒ¢ãƒ‹ã‚¿ã‚’å…ˆé ­è¦ç´ ã«ç§»å‹•
 	int mainMonitor = 0;
 	for (int i = 0; i < displays.size(); i++) {
 		if (displays[i].left == 0 && displays[i].top == 0) mainMonitor = i;
@@ -94,7 +94,7 @@ std::vector<RECT> GetDisplayInfo() {
 	return displays;
 }
 
-// ƒfƒBƒXƒvƒŒƒCî•ñæ“¾ƒR[ƒ‹ƒoƒbƒN
+// ãƒ‡ã‚£ã‚¹ãƒ—ãƒ¬ã‚¤æƒ…å ±å–å¾—ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯
 BOOL CALLBACK MonitorEnumProc(
 	HMONITOR hMon, HDC hdcMon, LPRECT lpMon, LPARAM dwData) {
 
@@ -103,7 +103,7 @@ BOOL CALLBACK MonitorEnumProc(
 	return TRUE;
 }
 
-// ˆÀ‘S‚ÈƒfƒŠ[ƒg
+// å®‰å…¨ãªãƒ‡ãƒªãƒ¼ãƒˆ
 void SafeDelete(void** ptr) {
 	if (*ptr) {
 		delete* ptr;
@@ -111,7 +111,7 @@ void SafeDelete(void** ptr) {
 	}
 }
 
-// “ú•t•¶š—ñæ“¾ (C++20‚É‚È‚Á‚½‚ç std::format g‚¢‚½‚¢j
+// æ—¥ä»˜æ™‚åˆ»æ–‡å­—åˆ—å–å¾— (C++20ã«ãªã£ãŸã‚‰ std::format ä½¿ã„ãŸã„ï¼‰
 std::string DateTimeStr() {
 	SYSTEMTIME st;
 	::GetLocalTime(&st);

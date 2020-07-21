@@ -1,32 +1,32 @@
-#include "ComPort.h"
+ï»¿#include "ComPort.h"
 
 namespace nkc {
 
-// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 ComPort::ComPort(void) :
 	_ComHandle(INVALID_HANDLE_VALUE)
 {
 }
 
-// ƒfƒXƒgƒ‰ƒNƒ^(I—¹ˆ—)
+// ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿(çµ‚äº†å‡¦ç†)
 ComPort::~ComPort(void)
 {
 	this->Close();
 }
 
-// ƒ|[ƒg‚ğ’T‚µ‚ÄŠJ‚­isendStr‚ğ‘—M‚µ‚ÄCcheckStr‚ğ•Ô‚·ƒ|[ƒg‚ğ’T‚·j
-// TCHAR* config : ƒVƒŠƒAƒ‹ƒ|[ƒgİ’è•¶š—ñ —áj""
-// char* sendStr : ‘—M•¶š—ñiƒoƒCƒiƒŠƒf[ƒ^‰Âj
-// int sendLen : ‘—M•¶š—ñ‚Ì’·‚³ (byte)
-// char* checkStr : ƒ`ƒFƒbƒN•¶š—ñiƒoƒCƒiƒŠƒf[ƒ^‰Âj
-// int checkLen : ƒ`ƒFƒbƒN•¶š—ñ‚Ì’·‚³ (byte)
-// –ß‚è’l : ”­Œ©‚µ‚½ƒ|[ƒg”Ô†i–¢”­Œ©‚Í0j
+// ãƒãƒ¼ãƒˆã‚’æ¢ã—ã¦é–‹ãï¼ˆsendStrã‚’é€ä¿¡ã—ã¦ï¼ŒcheckStrã‚’è¿”ã™ãƒãƒ¼ãƒˆã‚’æ¢ã™ï¼‰
+// TCHAR* config : ã‚·ãƒªã‚¢ãƒ«ãƒãƒ¼ãƒˆè¨­å®šæ–‡å­—åˆ— ä¾‹ï¼‰""
+// char* sendStr : é€ä¿¡æ–‡å­—åˆ—ï¼ˆãƒã‚¤ãƒŠãƒªãƒ‡ãƒ¼ã‚¿å¯ï¼‰
+// int sendLen : é€ä¿¡æ–‡å­—åˆ—ã®é•·ã• (byte)
+// char* checkStr : ãƒã‚§ãƒƒã‚¯æ–‡å­—åˆ—ï¼ˆãƒã‚¤ãƒŠãƒªãƒ‡ãƒ¼ã‚¿å¯ï¼‰
+// int checkLen : ãƒã‚§ãƒƒã‚¯æ–‡å­—åˆ—ã®é•·ã• (byte)
+// æˆ»ã‚Šå€¤ : ç™ºè¦‹ã—ãŸãƒãƒ¼ãƒˆç•ªå·ï¼ˆæœªç™ºè¦‹æ™‚ã¯0ï¼‰
 int ComPort::Open(TCHAR* config, char* sendStr, int sendLen, char* checkStr, int checkLen)
 {
 	for (int findPort = 1; findPort <= COM_SEARCH_MAX; findPort++) {
 		if (this->Open(findPort, config)) {
 			this->Send((BYTE*)sendStr, sendLen);
-			::Sleep(100); // ­‚µ‘Ò‚Â
+			::Sleep(100); // å°‘ã—å¾…ã¤
 			BYTE buf[256];
 			this->Receive(buf, 256);
 			if (!::strncmp((char*)buf, checkStr, checkLen)) return findPort;
@@ -35,22 +35,22 @@ int ComPort::Open(TCHAR* config, char* sendStr, int sendLen, char* checkStr, int
 	return 0;
 }
 
-// ƒ|[ƒg‚ğŠJ‚­
+// ãƒãƒ¼ãƒˆã‚’é–‹ã
 bool ComPort::Open(int port, const TCHAR* config)
 {
 	this->Close();
 
-	// ƒ|[ƒg”Ô†•¶š—ñ¶¬
+	// ãƒãƒ¼ãƒˆç•ªå·æ–‡å­—åˆ—ç”Ÿæˆ
 	if (port < 1) return false;
 	TCHAR portStr[16];
 	::wsprintf(portStr, _T("\\\\.\\COM%d"), port);
 
-	// Comƒ|[ƒg‚ğŠJ‚­
+	// Comãƒãƒ¼ãƒˆã‚’é–‹ã
 	_ComHandle = ::CreateFile(portStr, GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING,
 		FILE_ATTRIBUTE_NORMAL, NULL);
 	if (_ComHandle == INVALID_HANDLE_VALUE) return false;
 
-	// ƒ|[ƒgİ’è
+	// ãƒãƒ¼ãƒˆè¨­å®š
 	DCB dcb;
 	::GetCommState(_ComHandle, &dcb);
 	::BuildCommDCB(config, &dcb);
@@ -60,7 +60,7 @@ bool ComPort::Open(int port, const TCHAR* config)
 	dcb.fAbortOnError = FALSE;
 	::SetCommState(_ComHandle, &dcb);
 
-	// ƒ^ƒCƒ€ƒAƒEƒgİ’è
+	// ã‚¿ã‚¤ãƒ ã‚¢ã‚¦ãƒˆè¨­å®š
 	COMMTIMEOUTS timeout;
 	::GetCommTimeouts(_ComHandle, &timeout);
 	timeout.ReadIntervalTimeout = MAXDWORD;
@@ -73,7 +73,7 @@ bool ComPort::Open(int port, const TCHAR* config)
 	return true;
 }
 
-// ƒ|[ƒg‚ğ•Â‚¶‚é
+// ãƒãƒ¼ãƒˆã‚’é–‰ã˜ã‚‹
 void ComPort::Close()
 {
 	if (_ComHandle != INVALID_HANDLE_VALUE)
@@ -83,18 +83,18 @@ void ComPort::Close()
 	}
 }
 
-// ƒf[ƒ^‘—M
+// ãƒ‡ãƒ¼ã‚¿é€ä¿¡
 DWORD ComPort::Send(const BYTE* data, DWORD dataLen)
 {
 	if (_ComHandle == INVALID_HANDLE_VALUE) return 0;
 
-	DWORD sendSize; // ‘—M‚µ‚½ƒoƒCƒg”
+	DWORD sendSize; // é€ä¿¡ã—ãŸãƒã‚¤ãƒˆæ•°
 	::WriteFile(_ComHandle, data, dataLen, &sendSize, NULL);
 
 	return sendSize;
 }
 
-// ƒf[ƒ^óM
+// ãƒ‡ãƒ¼ã‚¿å—ä¿¡
 DWORD ComPort::Receive(BYTE* buffer, DWORD bufferLen)
 {
 	if (_ComHandle == INVALID_HANDLE_VALUE) return 0;
@@ -107,17 +107,17 @@ DWORD ComPort::Receive(BYTE* buffer, DWORD bufferLen)
 	if (queSize < 1) return 0;
 	if (bufferLen < queSize) queSize = bufferLen;
 
-	// ƒoƒbƒtƒ@‚ÌƒNƒŠƒA
+	// ãƒãƒƒãƒ•ã‚¡ã®ã‚¯ãƒªã‚¢
 	::memset(buffer, 0, bufferLen);
 
-	// óM
-	DWORD receiveSize; // óM‚µ‚½ƒoƒCƒg”
+	// å—ä¿¡
+	DWORD receiveSize; // å—ä¿¡ã—ãŸãƒã‚¤ãƒˆæ•°
 	::ReadFile(_ComHandle, buffer, queSize, &receiveSize, NULL);
 
 	return receiveSize;
 }
 
-// ƒ^ƒCƒ€ƒAƒEƒg•t‚«ƒf[ƒ^óM
+// ã‚¿ã‚¤ãƒ ã‚¢ã‚¦ãƒˆä»˜ããƒ‡ãƒ¼ã‚¿å—ä¿¡
 DWORD ComPort::WaitReceive(BYTE* buffer, DWORD bufferLen, const int timeout)
 {
 	if (_ComHandle == INVALID_HANDLE_VALUE) return 0;
