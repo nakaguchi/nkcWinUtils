@@ -1,4 +1,8 @@
 ﻿#include "ComPort.h"
+#include <setupapi.h>
+#include <string>
+#pragma comment(lib,"setupapi.lib")
+typedef std::basic_string<TCHAR> tstring;
 
 namespace nkc {
 
@@ -128,5 +132,41 @@ DWORD ComPort::WaitReceive(BYTE* buffer, DWORD bufferLen, const int timeout)
 
 	return receiveSize;
 }
+
+
+// COMポートデバイスを検索する
+// 引数 TCHAR* deviceStr : 検索するデバイス名（部分一致）
+// 戻り値 (int)COMポート番号，未発見時は 0
+int ComPort::FindDevice(const TCHAR* deviceStr) {
+
+	HDEVINFO hDevInfo = SetupDiGetClassDevs(&GUID_DEVINTERFACE_COMPORT, 0, 0,
+		DIGCF_PRESENT | DIGCF_DEVICEINTERFACE); // デバイス情報セットを取得
+	if (!hDevInfo) return 0; // デバイス情報セットが取得できなかった場合
+
+	SP_DEVINFO_DATA devInfoData;
+	ZeroMemory(&devInfoData, sizeof(devInfoData));
+	devInfoData.cbSize = sizeof(devInfoData);
+
+	// COMポート列挙
+	int nDevice = 0;
+	int com = 0;
+	while (SetupDiEnumDeviceInfo(hDevInfo, nDevice++, &devInfoData) && com < 1) {
+		BYTE friendly_name[300];
+		SetupDiGetDeviceRegistryProperty(hDevInfo, &devInfoData,
+			SPDRP_FRIENDLYNAME, NULL, friendly_name, sizeof(friendly_name), NULL);
+		auto fn = tstring((TCHAR*)friendly_name);
+
+		// デバイス検索
+		if (fn.find(deviceStr) != tstring::npos) {
+			size_t start = fn.find(_T("(COM")) + 4;
+			com = _tstoi(fn.substr(start).c_str());
+			//_tprintf(_T("Found : %s\n"), fn.c_str());
+		}
+	}
+	SetupDiDestroyDeviceInfoList(hDevInfo); // デバイス情報セットを解放
+
+	return com;
+}
+
 
 }; // namespace nkc

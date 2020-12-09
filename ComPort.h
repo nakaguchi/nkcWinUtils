@@ -13,7 +13,6 @@ class ComPort
 	HANDLE _ComHandle;
 
 public:
-
 	ComPort(void);
 	~ComPort(void);
 	int Open(TCHAR* config, char* sendStr, int sendLen, char* checkStr, int checkLen);
@@ -22,6 +21,7 @@ public:
 	DWORD Send(const BYTE* data, DWORD dataLen);
 	DWORD Receive(BYTE* buffer, DWORD bufferLen);
 	DWORD WaitReceive(BYTE* buffer, DWORD bufferLen, int timeout);
+	static int FindDevice(const TCHAR* deviceStr);	// COMポート一覧取得 
 };
 
 }; // namespace nkc
